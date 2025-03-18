@@ -119,7 +119,6 @@ const queryFormColumns: ColumnItem[] = reactive([
     },
     props: {
       placeholder: '搜索用户名/昵称/描述',
-      showWordLimit: false,
     },
   },
   {
