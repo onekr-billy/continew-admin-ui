@@ -47,27 +47,31 @@
               {{ item.title }}
             </a-checkbox>
             <div class="gi-table__draggable-item-fixed">
-              <icon-pushpin
-                class="gi-table__fixed-icon"
-                :class="[
-                  {
-                    'gi-table__fixed-icon--active': item.fixed === 'left',
-                    'gi-table__fixed-icon--disabled': !item.show,
-                  },
-                ]"
-                @click="handleFixedColumn(item, 'left')"
-              />
-              <icon-pushpin
-                class="gi-table__fixed-icon"
-                :class="[
-                  {
-                    'gi-table__fixed-icon--active': item.fixed === 'right',
-                    'gi-table__fixed-icon--disabled': !item.show,
-                  },
-                ]"
-                :rotate="270"
-                @click="handleFixedColumn(item, 'right')"
-              />
+              <a-tooltip content="左固定">
+                <icon-pushpin
+                  class="gi-table__fixed-icon"
+                  :class="[
+                    {
+                      'gi-table__fixed-icon--active': item.fixed === 'left',
+                      'gi-table__fixed-icon--disabled': !item.show,
+                    },
+                  ]"
+                  @click="handleFixedColumn(item, 'left')"
+                />
+              </a-tooltip>
+              <a-tooltip content="右固定">
+                <icon-pushpin
+                  class="gi-table__fixed-icon"
+                  :class="[
+                    {
+                      'gi-table__fixed-icon--active': item.fixed === 'right',
+                      'gi-table__fixed-icon--disabled': !item.show,
+                    },
+                  ]"
+                  :rotate="270"
+                  @click="handleFixedColumn(item, 'right')"
+                />
+              </a-tooltip>
             </div>
           </div>
         </VueDraggable>
