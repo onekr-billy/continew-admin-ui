@@ -1,11 +1,18 @@
 <template>
   <a-row align="stretch" :gutter="rowGutter" class="gi-page-layout" :class="getClass">
-    <a-col v-if="slots.left" v-bind="props.leftColProps" :xs="0" :sm="8" :md="7" :lg="6" :xl="5" :xxl="4" flex="260px">
+    <a-col v-if="slots.left" v-show="!isCollapsed || (!isDesktop && !isCollapsed)" v-bind="props.leftColProps" :xs="isCollapsed ? 1 : 23" :sm="8" :md="7" :lg="6" :xl="5" :xxl="4">
       <div class="gi-page-layout__left" :style="props.leftStyle">
         <slot name="left"></slot>
       </div>
     </a-col>
-    <a-col :xs="24" :sm="16" :md="17" :lg="18" :xl="19" :xxl="20" flex="1" v-bind="props.rightColProps">
+    <div
+      class="gi-page-layout__divider" :class="{
+        none: isCollapsed || !isDesktop,
+      }"
+    >
+      <GiSplitButton :collapsed="isCollapsed" @click="toggleCollapsed"></GiSplitButton>
+    </div>
+    <a-col v-show="isDesktop || (!isDesktop && isCollapsed)" :sm="16" :md="17" :lg="18" :xl="19" :xxl="20" flex="1" v-bind="props.rightColProps">
       <div v-if="slots.header" class="gi-page-layout__header" :style="props.headerStyle">
         <slot name="header"></slot>
       </div>
@@ -19,6 +26,7 @@
 <script setup lang='ts'>
 import type { ColProps } from '@arco-design/web-vue'
 import type { CSSProperties } from 'vue'
+import { useDevice } from '@/hooks'
 
 defineOptions({ name: 'GiPageLayout' })
 
@@ -39,6 +47,8 @@ defineSlots<{
   left: () => void
   default: () => void
 }>()
+
+const { isDesktop } = useDevice()
 
 const getClass = computed(() => {
   return {
@@ -68,6 +78,10 @@ interface Props {
 }
 
 const slots = useSlots()
+const isCollapsed = ref(false)
+const toggleCollapsed = () => {
+  isCollapsed.value = !isCollapsed.value
+}
 </script>
 
 <style lang='scss' scoped>
@@ -78,6 +92,7 @@ const slots = useSlots()
   overflow: hidden;
   box-sizing: border-box;
   background-color: var(--color-bg-1);
+  position: relative;
 
   &--margin {
     margin: $margin;
@@ -112,7 +127,6 @@ const slots = useSlots()
 
 .gi-page-layout__left {
   height: 100%;
-  border-right: 1px solid var(--color-border);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -130,5 +144,15 @@ const slots = useSlots()
   flex-direction: column;
   overflow: hidden;
   box-sizing: border-box;
+}
+
+.gi-page-layout__divider {
+  position: relative;
+  width: 1px;
+  background-color: var(--color-border);
+}
+
+.gi-page-layout__divider.none {
+  width: 0;
 }
 </style>
