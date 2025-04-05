@@ -1,5 +1,5 @@
 <template>
-  <div class="gi_table_page">
+  <GiPageLayout>
     <GiTable
       row-key="id"
       title="消息中心"
@@ -59,7 +59,7 @@
         <GiCellTag :value="record.type" :dict="message_type" />
       </template>
     </GiTable>
-  </div>
+  </GiPageLayout>
 </template>
 
 <script setup lang="ts">
