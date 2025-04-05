@@ -6,7 +6,7 @@
       </div>
     </a-col>
     <div v-if="slots.left" class="gi-page-layout__divider" :class="{ none: isCollapsed || !isDesktop }">
-      <div class="gi-split-button" :class="{ none: isCollapsed || !isDesktop }" @click="toggleCollapsed">
+      <div v-if="defaultCollapsed" class="gi-split-button" :class="{ none: isCollapsed || !isDesktop }" @click="toggleCollapsed">
         <icon-right v-if="isCollapsed" />
         <icon-left v-else />
       </div>
@@ -33,6 +33,7 @@ const props = withDefaults(defineProps<Props>(), {
   margin: true,
   padding: true,
   gutter: false,
+  defaultCollapsed: true,
   leftColProps: () => ({}),
   rightColProps: () => ({}),
   leftStyle: () => ({}),
@@ -68,6 +69,7 @@ interface Props {
   margin?: boolean
   padding?: boolean
   gutter?: boolean | number
+  defaultCollapsed?: boolean
   leftColProps?: ColProps
   rightColProps?: ColProps
   leftStyle?: CSSProperties
