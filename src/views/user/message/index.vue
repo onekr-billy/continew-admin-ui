@@ -1,11 +1,11 @@
 <template>
   <GiPageLayout :margin="true" :default-collapsed="false">
     <template v-if="isDesktop" #left>
-      <a-tabs v-model:active-key="activeKey" position="left" hide-content @change="change">
+      <a-tabs v-model:active-key="activeKey" position="left" hide-content size="large" @change="change">
         <a-tab-pane v-for="(item) in menuList" :key="item.key" :title="item.name"></a-tab-pane>
       </a-tabs>
     </template>
-    <a-tabs v-if="!isDesktop" v-model:active-key="activeKey" type="card-gutter" style="margin-bottom: 10px" position="top" hide-content @change="change">
+    <a-tabs v-if="!isDesktop" v-model:active-key="activeKey" type="card-gutter" position="top" size="large" @change="change">
       <a-tab-pane v-for="(item) in menuList" :key="item.key" :title="item.name"></a-tab-pane>
     </a-tabs>
     <transition name="fade-slide" mode="out-in" appear>
@@ -79,5 +79,32 @@ const change = (key: string | number) => {
 :deep(.arco-tabs-nav-vertical) {
   float: none;
   flex-direction: row;
+}
+
+:deep(.arco-tabs .arco-tabs-nav-type-card-gutter .arco-tabs-tab-active) {
+  box-shadow: inset 0 2px 0 rgb(var(--primary-6)), inset -1px 0 0 var(--color-border-2),
+  inset 1px 0 0 var(--color-border-2);
+  position: relative;
+}
+
+:deep(.arco-tabs-nav-type-card-gutter .arco-tabs-tab) {
+  border-radius: var(--border-radius-medium) var(--border-radius-medium) 0 0;
+}
+
+:deep(.arco-tabs-type-card-gutter > .arco-tabs-content) {
+  border: none;
+}
+
+:deep(.arco-tabs-nav::before) {
+  left: -20px;
+  right: -20px;
+}
+
+:deep(.arco-tabs) {
+  overflow: visible;
+}
+
+:deep(.arco-tabs-nav) {
+  overflow: visible;
 }
 </style>
