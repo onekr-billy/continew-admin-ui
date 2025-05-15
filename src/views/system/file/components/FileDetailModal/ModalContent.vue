@@ -9,14 +9,19 @@
       <a-descriptions-item label="名称">
         <a-typography-paragraph copyable :copy-text="data.url">
           <template #copy-tooltip>复制链接</template>
-          {{ getFileName(data) }}
+          {{ data.originalName }}
         </a-typography-paragraph>
       </a-descriptions-item>
       <a-descriptions-item label="大小">{{ formatFileSize(data.size) }}</a-descriptions-item>
-      <a-descriptions-item label="路径">{{ data.absPath + getFileName(data) }}</a-descriptions-item>
-      <a-descriptions-item label="SHA256">{{ data.sha256 }}</a-descriptions-item>
+      <a-descriptions-item label="路径">{{ `${data.path === '/' ? '' : data.path}/${data.name}` }}</a-descriptions-item>
+      <a-descriptions-item v-if="data.sha256" label="SHA256">
+        <a-typography-paragraph copyable :copy-text="data.sha256">
+          <template #copy-tooltip>复制</template>
+          {{ data.sha256 }}
+        </a-typography-paragraph>
+      </a-descriptions-item>
       <a-descriptions-item label="上传时间">{{ data.createTime }}</a-descriptions-item>
-      <a-descriptions-item label="修改时间">{{ data.updateTime }}</a-descriptions-item>
+      <a-descriptions-item v-if="data?.updateTime" label="修改时间">{{ data?.updateTime }}</a-descriptions-item>
       <a-descriptions-item label="存储名称">{{ data.storageName }}</a-descriptions-item>
     </a-descriptions>
   </a-row>
@@ -32,11 +37,6 @@ interface Props {
 }
 
 withDefaults(defineProps<Props>(), {})
-
-// 文件名称带后缀
-const getFileName = (item: FileItem) => {
-  return `${item.name}${item.extension ? `.${item.extension}` : ''}`
-}
 </script>
 
 <style lang="less" scoped>

@@ -30,7 +30,7 @@
                 </div>
                 <a-typography-paragraph copyable :copy-text="record.url">
                   <template #copy-tooltip>复制链接</template>
-                  {{ getFileName(record) }}
+                  {{ record.originalName }}
                 </a-typography-paragraph>
               </section>
               <template #content>
@@ -88,11 +88,6 @@ interface Props {
   data?: FileItem[]
   selectedFileIds?: string[]
   isBatchMode?: boolean
-}
-
-// 文件名称带后缀
-const getFileName = (item: FileItem) => {
-  return `${item.name}${item.extension ? `.${item.extension}` : ''}`
 }
 
 const rowSelection: TableRowSelection = reactive({

@@ -202,24 +202,25 @@ export interface NoticePageQuery extends NoticeQuery, PageQuery {
 export interface FileItem {
   id: string
   name: string
+  originalName: string
   size: number
   url: string
-  parentPath: string
-  absPath: string
-  metadata: string
+  path: string
   sha256: string
   contentType: string
+  metadata: string
   thumbnailSize: number
-  thumbnailUrl: string
+  thumbnailName: string
   thumbnailMetadata: string
+  thumbnailUrl: string
   extension: string
   type: number
   storageId: string
   storageName: string
   createUserString: string
   createTime: string
-  updateUserString: string
-  updateTime: string
+  updateUserString?: string
+  updateTime?: string
 }
 /** 文件资源统计信息 */
 export interface FileStatisticsResp {
@@ -230,9 +231,9 @@ export interface FileStatisticsResp {
   data: Array<FileStatisticsResp>
 }
 export interface FileQuery {
-  name?: string
+  originalName?: string
   type?: string
-  absPath?: string
+  path?: string
   sort: Array<string>
 }
 export interface FilePageQuery extends FileQuery, PageQuery {

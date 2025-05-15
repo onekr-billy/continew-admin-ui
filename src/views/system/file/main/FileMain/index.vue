@@ -38,7 +38,7 @@
             <icon-delete />
           </template>
         </a-button>
-        <a-button type="primary" :disabled="!queryForm.absPath" @click="createDirModalVisible = !createDirModalVisible">
+        <a-button type="primary" :disabled="!queryForm.path" @click="createDirModalVisible = !createDirModalVisible">
           <template #icon>
             <icon-folder />
           </template>
@@ -105,7 +105,7 @@ import FileGrid from './FileGrid.vue'
 import useFileManage from './useFileManage'
 import { useTable } from '@/hooks'
 import { type FileItem, type FileQuery, createDir, deleteFile, listFile, uploadFile } from '@/apis'
-import { DirTypes, ImageTypes, OfficeTypes } from '@/constant/file'
+import { ImageTypes, OfficeTypes } from '@/constant/file'
 import 'viewerjs/dist/viewer.css'
 import { downloadByUrl } from '@/utils/downloadFile'
 import mittBus from '@/utils/mitt'
@@ -119,12 +119,12 @@ const { mode, selectedFileIds, toggleMode, addSelectedFileItem } = useFileManage
 
 const queryTypeOption = [{
   label: '文件名',
-  value: 'name',
+  value: 'originalName',
 }, {
   label: '路径',
-  value: 'absPath',
+  value: 'path',
 }]
-const queryType = ref<string>('name')
+const queryType = ref<string>('originalName')
 
 // 新建文件夹弹窗显示
 const createDirModalVisible = ref<boolean>(false)
@@ -132,15 +132,15 @@ const createDirModalVisible = ref<boolean>(false)
 const newDirName = ref()
 
 const queryForm = reactive<FileQuery>({
-  name: undefined,
-  absPath: '/',
-  type: route.query.type?.toString() !== '0' ? route.query.type?.toString() : undefined,
-  sort: ['updateTime,desc'],
+  originalName: undefined,
+  path: (!route.query.type || route.query.type?.toString() === '0') ? '/' : undefined,
+  type: route.query.type?.toString() && route.query.type?.toString() !== '0' ? route.query.type?.toString() : undefined,
+  sort: ['type,asc', 'updateTime,desc'],
 })
 
 const reset = () => {
-  queryForm.name = undefined
-  queryForm.absPath = undefined
+  queryForm.originalName = undefined
+  queryForm.path = undefined
 }
 
 const paginationOption = reactive({
@@ -186,7 +186,7 @@ const handleClickFile = (item: FileItem) => {
       },
     }
     filePreviewRef.value.onPreview({
-      fileInfo: { data: item.url, fileName: item.name, fileType: item.extension },
+      fileInfo: { data: item.url, fileName: item.originalName, fileType: item.extension },
       excelConfig,
     })
   }
@@ -200,12 +200,8 @@ const handleClickFile = (item: FileItem) => {
 
 // 双击文件
 const handleDblclickFile = (item: FileItem) => {
-  if (DirTypes.includes(item.extension)) {
-    if (item.absPath.endsWith('/')) {
-      queryForm.absPath = item.absPath + item.name
-    } else {
-      queryForm.absPath = `${item.absPath}/${item.name}`
-    }
+  if (item.type === 0) {
+    queryForm.path = `${item.path === '/' ? '' : item.path}/${item.name}`
     search()
   }
 }
@@ -215,7 +211,7 @@ const onDownload = async (fileInfo: FileItem) => {
   const res = await downloadByUrl({
     url: fileInfo.url,
     target: '_self',
-    fileName: `${fileInfo.name}.${fileInfo.extension}`,
+    fileName: fileInfo.originalName,
   })
   res ? Message.success('下载成功') : Message.error('下载失败')
   search()
@@ -226,7 +222,7 @@ const handleRightMenuClick = async (mode: string, fileInfo: FileItem) => {
   if (mode === 'delete') {
     Modal.warning({
       title: '提示',
-      content: `是否确定删除文件「${fileInfo.name}」？`,
+      content: `是否确定删除${fileInfo.type === 0 ? '文件夹' : '文件'}「${fileInfo.originalName}」？`,
       hideCancel: false,
       okButtonProps: { status: 'danger' },
       onOk: async () => {
@@ -273,7 +269,7 @@ const handleUpload = (options: RequestOption) => {
     const { onProgress, onError, onSuccess, fileItem, name = 'file' } = options
     onProgress(20)
     const formData = new FormData()
-    formData.append('path', queryForm.absPath ?? '/')
+    formData.append('path', queryForm.path ?? '/')
     formData.append(name as string, fileItem.file as Blob)
     try {
       const res = await uploadFile(formData)
@@ -295,10 +291,12 @@ const handleUpload = (options: RequestOption) => {
 
 onBeforeRouteUpdate((to) => {
   if (!to.query.type) return
-  if (to.query.type === '0') {
+  if (to.query.type === '0' || !to.query.type) {
     queryForm.type = undefined
+    queryForm.path = '/'
   } else {
     queryForm.type = to.query.type?.toString()
+    queryForm.path = undefined
   }
 
   search()
@@ -312,7 +310,7 @@ const handleCancel = () => {
 
 // 新建文件夹弹窗窗口确认事件
 const handleCreateDir = async () => {
-  await createDir(queryForm.absPath ?? '/', newDirName.value)
+  await createDir(queryForm.path ?? '/', newDirName.value)
   newDirName.value = undefined
   createDirModalVisible.value = false
   search()

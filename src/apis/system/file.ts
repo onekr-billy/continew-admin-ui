@@ -32,5 +32,5 @@ export function checkFile(sha256: string) {
 
 /** @desc 创建文件夹 */
 export function createDir(path: string, name: string) {
-  return http.post<T.FileItem>(`${BASE_URL}/createDir`, { parentPath: path, name })
+  return http.post<T.FileItem>(`${BASE_URL}/dir`, { path, originalName: name })
 }
