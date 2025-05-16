@@ -205,6 +205,7 @@ export interface FileItem {
   originalName: string
   size: number
   url: string
+  parentPath: string
   path: string
   sha256: string
   contentType: string
@@ -230,10 +231,14 @@ export interface FileStatisticsResp {
   unit: string
   data: Array<FileStatisticsResp>
 }
+/** 文件夹计算大小信息 */
+export interface FileDirCalcSizeResp {
+  size: number
+}
 export interface FileQuery {
   originalName?: string
   type?: string
-  path?: string
+  parentPath?: string
   sort: Array<string>
 }
 export interface FilePageQuery extends FileQuery, PageQuery {
