@@ -101,7 +101,15 @@
 import type { TableInstance } from '@arco-design/web-vue'
 import { Message, Modal } from '@arco-design/web-vue'
 import { useWindowSize } from '@vueuse/core'
-import { type MessageQuery, deleteMessage, listMessage, readAllMessage, readMessage } from '@/apis'
+import {
+  type MessageQuery,
+  type MessageResp,
+  deleteMessage,
+  getUserMessage,
+  listMessage,
+  readAllMessage,
+  readMessage,
+} from '@/apis'
 import { useTable } from '@/hooks'
 import { useDict } from '@/hooks/app'
 import mittBus from '@/utils/mitt'
@@ -183,28 +191,15 @@ const onReadAll = async () => {
   })
 }
 
-// 消息详情弹窗相关
 const messageDetailVisible = ref(false)
-const currentMessage = ref()
-
-// 标记单条消息为已读
-const markAsRead = async (messageId: string) => {
-  try {
-    await readMessage([messageId])
-    search()
-  } catch (error) {
-    Message.error('操作失败')
-  }
-}
-
+const currentMessage = ref<MessageResp>()
 // 显示消息详情
 const showMessageDetail = async (record: any) => {
-  currentMessage.value = record
   messageDetailVisible.value = true
-  // 如果消息未读，自动标记为已读
-  if (!record.isRead) {
-    await markAsRead(record.id)
-  }
+  const { data } = await getUserMessage(record.id)
+  currentMessage.value = data
+  record.isRead = currentMessage.value?.isRead
+  onSuccess()
 }
 </script>
 
