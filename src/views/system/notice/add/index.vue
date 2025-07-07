@@ -207,8 +207,8 @@ const onUpdate = async (id: string) => {
 
 // 返回
 const onBack = () => {
-  router.back()
   tabsStore.closeCurrent(route.path)
+  router.push('/system/notice')
 }
 
 // 保存
