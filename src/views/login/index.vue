@@ -87,6 +87,7 @@
       </div>
     </div>
   </div>
+  <SelectTenant />
 </template>
 
 <script setup lang="ts">
