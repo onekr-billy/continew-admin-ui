@@ -8,6 +8,9 @@
     size="large"
     @submit="handleLogin"
   >
+    <a-form-item v-if="tenantEnabled" field="tenantCode" hide-label>
+      <a-input v-model="tenantCode" placeholder="请输入租户编码" allow-clear />
+    </a-form-item>
     <a-form-item field="email" hide-label>
       <a-input v-model="form.email" placeholder="请输入邮箱" allow-clear />
     </a-form-item>
@@ -40,16 +43,21 @@
 
 <script setup lang="ts">
 import { type FormInstance, Message } from '@arco-design/web-vue'
+import { computed } from 'vue'
 import type { BehaviorCaptchaReq } from '@/apis'
 // import { type BehaviorCaptchaReq, getEmailCaptcha } from '@/apis'
-import { useTabsStore, useUserStore } from '@/stores'
+import { useAppStore, useTabsStore, useUserStore } from '@/stores'
 import * as Regexp from '@/utils/regexp'
+
+const appStore = useAppStore()
+const tenantEnabled = computed(() => appStore.getTenantEnabled())
 
 const formRef = ref<FormInstance>()
 const form = reactive({
   email: '',
   captcha: '',
 })
+const tenantCode = ref()
 
 const rules: FormInstance['rules'] = {
   email: [
@@ -69,7 +77,7 @@ const handleLogin = async () => {
     const isInvalid = await formRef.value?.validate()
     if (isInvalid) return
     loading.value = true
-    await userStore.emailLogin(form)
+    await userStore.emailLogin(form, tenantCode.value)
     tabsStore.reset()
     const { redirect, ...othersQuery } = router.currentRoute.value.query
 

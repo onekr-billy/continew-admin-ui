@@ -8,6 +8,9 @@
     size="large"
     @submit="handleLogin"
   >
+    <a-form-item v-if="tenantEnabled" field="tenantCode" hide-label>
+      <a-input v-model="tenantCode" placeholder="请输入租户编码" allow-clear />
+    </a-form-item>
     <a-form-item field="username" hide-label>
       <a-input v-model="form.username" placeholder="请输入用户名" allow-clear />
     </a-form-item>
@@ -40,12 +43,17 @@
 <script setup lang="ts">
 import { type FormInstance, Message } from '@arco-design/web-vue'
 import { useStorage } from '@vueuse/core'
+import { computed } from 'vue'
 import { getImageCaptcha } from '@/apis/common'
-import { useTabsStore, useUserStore } from '@/stores'
+import { useAppStore, useTabsStore, useUserStore } from '@/stores'
 import { encryptByRsa } from '@/utils/encrypt'
+
+const appStore = useAppStore()
+const tenantEnabled = computed(() => appStore.getTenantEnabled())
 
 const loginConfig = useStorage('login-config', {
   rememberMe: true,
+  tenantCode: '',
   username: 'admin', // 演示默认值
   password: 'admin123', // 演示默认值
   // username: debug ? 'admin' : '', // 演示默认值
@@ -64,6 +72,7 @@ const form = reactive({
   uuid: '',
   expired: false,
 })
+const tenantCode = ref()
 const rules: FormInstance['rules'] = {
   username: [{ required: true, message: '请输入用户名' }],
   password: [{ required: true, message: '请输入密码' }],
@@ -119,10 +128,11 @@ const handleLogin = async () => {
       password: encryptByRsa(form.password) || '',
       captcha: form.captcha,
       uuid: form.uuid,
-    })
+    }, tenantCode.value)
     tabsStore.reset()
     const { redirect, ...othersQuery } = router.currentRoute.value.query
     const { rememberMe } = loginConfig.value
+    loginConfig.value.tenantCode = rememberMe ? tenantCode.value : ''
     loginConfig.value.username = rememberMe ? form.username : ''
 
     // 如果有重定向参数，解码并直接跳转到完整路径

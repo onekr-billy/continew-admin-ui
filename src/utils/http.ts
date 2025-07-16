@@ -52,17 +52,14 @@ const handleError = (msg: string) => {
 http.interceptors.request.use(
   (config: AxiosRequestConfig) => {
     const token = getToken()
+    if (!config.headers) {
+      config.headers = {}
+    }
     if (token) {
-      if (!config.headers) {
-        config.headers = {}
-      }
       config.headers.Authorization = `Bearer ${token}`
     }
     const tenantId = getTenantId()
     if (tenantId) {
-      if (!config.headers) {
-        config.headers = {}
-      }
       config.headers['X-Tenant-Id'] = tenantId
     }
     return config

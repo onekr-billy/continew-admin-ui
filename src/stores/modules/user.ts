@@ -50,22 +50,22 @@ const storeSetup = () => {
   }
 
   // 登录
-  const accountLogin = async (req: AccountLoginReq) => {
-    const res = await accountLoginApi({ ...req, clientId: import.meta.env.VITE_CLIENT_ID, authType: AuthTypeConstants.ACCOUNT })
+  const accountLogin = async (req: AccountLoginReq, tenantCode?: string) => {
+    const res = await accountLoginApi({ ...req, clientId: import.meta.env.VITE_CLIENT_ID, authType: AuthTypeConstants.ACCOUNT }, tenantCode)
     setToken(res.data.token)
     token.value = res.data.token
   }
 
   // 邮箱登录
-  const emailLogin = async (req: EmailLoginReq) => {
-    const res = await emailLoginApi({ ...req, clientId: import.meta.env.VITE_CLIENT_ID, authType: AuthTypeConstants.EMAIL })
+  const emailLogin = async (req: EmailLoginReq, tenantCode?: string) => {
+    const res = await emailLoginApi({ ...req, clientId: import.meta.env.VITE_CLIENT_ID, authType: AuthTypeConstants.EMAIL }, tenantCode)
     setToken(res.data.token)
     token.value = res.data.token
   }
 
   // 手机号登录
-  const phoneLogin = async (req: PhoneLoginReq) => {
-    const res = await phoneLoginApi({ ...req, clientId: import.meta.env.VITE_CLIENT_ID, authType: AuthTypeConstants.PHONE })
+  const phoneLogin = async (req: PhoneLoginReq, tenantCode?: string) => {
+    const res = await phoneLoginApi({ ...req, clientId: import.meta.env.VITE_CLIENT_ID, authType: AuthTypeConstants.PHONE }, tenantCode)
     setToken(res.data.token)
     token.value = res.data.token
   }

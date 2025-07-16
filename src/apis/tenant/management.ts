@@ -1,6 +1,5 @@
 import type * as T from './type'
 import http from '@/utils/http'
-import type { TenantCommon } from '@/utils/tenant'
 
 export type * from './type'
 
@@ -29,11 +28,6 @@ export function updateTenant(data: any, id: string) {
 /** @desc 删除租户 */
 export function deleteTenant(id: string) {
   return http.del(`${BASE_URL}/${id}`)
-}
-
-/** @desc 多租户通用信息查询 */
-export const getTenantCommon = () => {
-  return http.get<TenantCommon>(`${BASE_URL}/common`)
 }
 
 /** @desc 修改租户管理员密码 */
