@@ -1,31 +1,29 @@
 import { defineStore } from 'pinia'
-import { computed, reactive } from 'vue'
+import { computed, ref } from 'vue'
 
-const storeSetup = () => {
-  interface TenantInfo {
-    tenantEnabled: boolean
-    tenantCode: string
+export const useTenantStore = defineStore('tenant', () => {
+  const tenantEnabled = ref(false)
+  const tenantId = ref('')
+
+  const setTenantEnable = (status: boolean) => {
+    tenantEnabled.value = status
   }
-  const tenantInfo = reactive<TenantInfo>({
-    tenantEnabled: false,
-    tenantCode: '',
+  const setTenantId = (id: string) => {
+    tenantId.value = id
+  }
+
+  // 判断是否需要用户输入租户编码
+  const needInputTenantId = computed(() => {
+    return tenantEnabled.value && !tenantId.value
   })
-  const tenantEnabled = computed(() => tenantInfo.tenantEnabled)
-  const tenantCode = computed(() => tenantInfo.tenantCode)
-  const setTenantEnable = (tenantStatus: boolean) => {
-    tenantInfo.tenantEnabled = tenantStatus
-  }
-  const setTenantCode = (tenantCode: string) => {
-    tenantInfo.tenantCode = tenantCode
-  }
-  return {
-    tenantCode,
-    tenantEnabled,
-    setTenantCode,
-    setTenantEnable,
-  }
-}
 
-export const useTenantStore = defineStore('tenant', storeSetup, {
-  persist: { paths: ['tenantInfo'], storage: localStorage },
+  return {
+    tenantEnabled,
+    tenantId,
+    setTenantEnable,
+    setTenantId,
+    needInputTenantId,
+  }
+}, {
+  persist: { paths: ['tenantEnabled', 'tenantId'], storage: localStorage },
 })

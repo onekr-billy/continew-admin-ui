@@ -1,13 +1,13 @@
 import axios from 'axios'
 import qs from 'query-string'
 import type { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
+import { useTenantStore } from '@/stores/modules/tenant'
 import { useUserStore } from '@/stores'
 import { getToken } from '@/utils/auth'
 import modalErrorWrapper from '@/utils/modal-error-wrapper'
 import messageErrorWrapper from '@/utils/message-error-wrapper'
 import notificationErrorWrapper from '@/utils/notification-error-wrapper'
 import router from '@/router'
-import { getTenantId } from '@/utils/tenant'
 
 interface ICodeMessage {
   [propName: number]: string
@@ -58,9 +58,9 @@ http.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
-    const tenantId = getTenantId()
-    if (tenantId) {
-      config.headers['X-Tenant-Id'] = tenantId
+    const tenantStore = useTenantStore()
+    if (tenantStore.tenantEnabled && tenantStore.tenantId) {
+      config.headers['X-Tenant-Id'] = tenantStore.tenantId
     }
     return config
   },

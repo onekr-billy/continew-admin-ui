@@ -10,10 +10,7 @@ const login = (req: T.AccountLoginReq | T.PhoneLoginReq | T.EmailLoginReq, tenan
   if (tenantCode) {
     headers['X-Tenant-Code'] = tenantCode
   }
-  return http.requestNative({
-    url: `${BASE_URL}/login`,
-    data: req,
-    method: 'post',
+  return http.post<T.LoginResp>(`${BASE_URL}/login`, req, {
     headers,
   })
 }

@@ -96,14 +96,15 @@ import AccountLogin from './components/account/index.vue'
 import PhoneLogin from './components/phone/index.vue'
 import EmailLogin from './components/email/index.vue'
 import { socialAuth } from '@/apis/auth'
-import { useAppStore, useTenantStore } from '@/stores'
+import { useAppStore } from '@/stores'
+import { useTenantStore } from '@/stores/modules/tenant'
 import { useDevice } from '@/hooks'
-import { getTenantCodeByDomain, getTenantStatus } from '@/apis'
+import { getTenantIdByDomain, getTenantStatus } from '@/apis'
 
 defineOptions({ name: 'Login' })
+const appStore = useAppStore()
 const tenantStore = useTenantStore()
 const { isDesktop } = useDevice()
-const appStore = useAppStore()
 const title = computed(() => appStore.getTitle())
 const logo = computed(() => appStore.getLogo())
 
@@ -128,8 +129,8 @@ const onGetTenant = async () => {
   // 开启租户 根据地址(域名)查询租户code
   if (data) {
     const domain = window.location.hostname
-    const { data } = await getTenantCodeByDomain(domain)
-    tenantStore.setTenantCode(data)
+    const { data: tenantId } = await getTenantIdByDomain(domain)
+    tenantStore.setTenantId(tenantId)
   }
 }
 onMounted(() => {
