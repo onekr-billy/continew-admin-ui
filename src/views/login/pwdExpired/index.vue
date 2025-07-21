@@ -247,7 +247,6 @@ const logo = computed(() => appStore.getLogo())
         &-box {
             width: 86%;
             max-width: 850px;
-            height: 490px;
             display: flex;
             z-index: 999;
             box-shadow: 0 2px 4px 2px rgba(0, 0, 0, 0.08);
