@@ -45,11 +45,8 @@
 import { type FormInstance, Message } from '@arco-design/web-vue'
 // import type { BehaviorCaptchaReq } from '@/apis'
 import { type BehaviorCaptchaReq, getSmsCaptcha } from '@/apis'
-import { useTabsStore, useUserStore } from '@/stores'
+import { useTabsStore, useTenantStore, useUserStore } from '@/stores'
 import * as Regexp from '@/utils/regexp'
-import { useTenantStore } from '@/stores/modules/tenant'
-
-const tenantStore = useTenantStore()
 
 const formRef = ref<FormInstance>()
 const form = reactive({
@@ -66,6 +63,7 @@ const rules: FormInstance['rules'] = {
   captcha: [{ required: true, message: '请输入验证码' }],
 }
 
+const tenantStore = useTenantStore()
 const userStore = useUserStore()
 const tabsStore = useTabsStore()
 const router = useRouter()
