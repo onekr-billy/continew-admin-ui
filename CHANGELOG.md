@@ -1,3 +1,36 @@
+## [v4.0.0](https://github.com/continew-org/continew-admin-ui/compare/v3.7.0...v4.0.0) (2025-07-27)
+
+### ✨ 新特性
+
+- 新增多租户模块 (GitHub#75@xtanyu) ([e662565](https://github.com/continew-org/continew-admin-ui/commit/e66256581e5826e03aaad5170cb7de10f5ceabf7)) ([c7a1c1d](https://github.com/continew-org/continew-admin-ui/commit/c7a1c1deba13baa0718aba4f6f3eca7c0cd3e3de)) ([2c60203](https://github.com/continew-org/continew-admin-ui/commit/2c602033bdabbaafc75bcc37a40f809b61469881)) ([6a96eee](https://github.com/continew-org/continew-admin-ui/commit/6a96eee9e965871ded7063fab60d52921865a4b4)) ([112c27e](https://github.com/continew-org/continew-admin-ui/commit/112c27e49c2310910fa97f6b3f000e090fda73d7)) ([87bcf33](https://github.com/continew-org/continew-admin-ui/commit/87bcf33940dc37a9d8a62e0d0bf316e26cee01e8)) ([d4397ff](https://github.com/continew-org/continew-admin-ui/commit/d4397ffd570635c72eb1e214f9aaa9d8256f9dfc)) ([e63bedc](https://github.com/continew-org/continew-admin-ui/commit/e63bedc11b9ea6f59a8afe4284135b42a4dc65e2)) ([3e49bce](https://github.com/continew-org/continew-admin-ui/commit/3e49bce38e1b8d4ae2e181079e07c175b911fea7)) ([a72d122](https://github.com/continew-org/continew-admin-ui/commit/a72d12227ece9882eb5b0f8ccc378eae814fbeac)) ([0c594c1](https://github.com/continew-org/continew-admin-ui/commit/0c594c167e3b57911f09b2c7f43bb7873d462a4e))
+- 优化登录后的页面重定向逻辑 ([aaefb7f](https://github.com/continew-org/continew-admin-ui/commit/aaefb7f8e4b45c120dc3da2dc8f8671c058409b3))
+- 菜单列表增加路由地址和权限标识搜索功能 (GitCode#5@onekr-billy) ([900a2af](https://github.com/continew-org/continew-admin-ui/commit/900a2afdb7b369a14c914dcbb08ed48f094af1e9))
+- 新增查询角色权限树列表接口（替换角色分配权限的菜单树列表接口） ([87e6dea](https://github.com/continew-org/continew-admin-ui/commit/87e6deab4d5f96146e6bfdd4a4b1704be321f813))
+
+### 💎 功能优化
+
+- 统一加载图标 ([bb3c082](https://github.com/continew-org/continew-admin-ui/commit/bb3c082146805c664bb8a8d6ffadea9983f942f2))
+- 优化通知公告相关页面的回退逻辑 ([633f9aa](https://github.com/continew-org/continew-admin-ui/commit/633f9aaa4a27dab2ffa9f580edfb807e6987c75f))
+- 优化角色权限代码 ([8090861](https://github.com/continew-org/continew-admin-ui/commit/8090861bc6cc8951268e8e758b798f1a9463376f))
+- 将 common 目录下的 common.ts 文件移动到 system 目录下 ([60c6df2](https://github.com/continew-org/continew-admin-ui/commit/60c6df25747f348201d41d054812f0d935000752))
+- 更新短信配置和日志接口的 URL ([53aeebe](https://github.com/continew-org/continew-admin-ui/commit/53aeebeb4dd534bec2ad3cfcb09317cc6d8aad44))
+- 适配后端部分字典接口变化 ([d7937e7](https://github.com/continew-org/continew-admin-ui/commit/d7937e79054f2b7fd2c32fb2b47f7a27b14b1229))
+- 优化用户表单和菜单列表页面 ([dca7379](https://github.com/continew-org/continew-admin-ui/commit/dca7379c201ae665044d2756aba2c48aba18eaac))
+- 关于菜单增加更新日志内嵌菜单，移除在线文档外链菜单 ([f3dea88](https://github.com/continew-org/continew-admin-ui/commit/f3dea886adb6591dd7f8d81f835723d2a71c1e09))
+- 暂时下线查询日志详情功能（Snail Job 日志详情 API 变更为 WebSocket 模式） ([5050126](https://github.com/continew-org/continew-admin-ui/commit/5050126892b8488011aeaf45c37ed99ad22a8a27))
+
+### 🐛 问题修复
+
+- 修复用户角色列表单击行选中功能失效的问题 ([8b7ef16](https://github.com/continew-org/continew-admin-ui/commit/8b7ef16687d02d5671201418e0e122c0426b8176))
+- 修复邮箱配置的启用SSL加密开关初始值错误的问题 (GitCode#4@ali_pay) ([ca304f3](https://github.com/continew-org/continew-admin-ui/commit/ca304f30dcb7cd70ec06477b33147d4c3a205d7a))
+- 修复混合布局下的菜单过多不能滚动的问题 (GitHub#71@yingshi-7) ([4873418](https://github.com/continew-org/continew-admin-ui/commit/4873418561f746122d8bcee565b937c2d9b1e988))
+- code generator preview issue (GitHub#73@ppxb) ([fdfa0cd](https://github.com/continew-org/continew-admin-ui/commit/fdfa0cd2d5b9b586fb3ca4838647a8e68c9865c5))
+- 调整水印 z-index，以修复表格全屏或表单弹出时水印无法覆盖的问题 ([afd1bb7](https://github.com/continew-org/continew-admin-ui/commit/afd1bb7017b8a28b690eee842d69ae1bc35037b2)) ([4cf763e](https://github.com/continew-org/continew-admin-ui/commit/4cf763e8174601c629a09403272621c69ff4b179))
+- 弹窗报错信息和主题模式的按钮存在显示问题 ([41f458d](https://github.com/continew-org/continew-admin-ui/commit/41f458d2b0fbc9bc155fd7af8cbe52a7fdf19323))
+-  修复修改部门时上级部门选择的问题 (Gitee#61@lishuyanla) ([47e2dfa](https://github.com/continew-org/continew-admin-ui/commit/47e2dfaff030e181f1a2626218f20efd5f7025cc))
+- 修复字典项权限标识不一致的问题 (GitCode#5@onekr-billy) ([3ea79ec](https://github.com/continew-org/continew-admin-ui/commit/3ea79ec7e08e70144970d9761d86e564a3f0e806))
+- 系统内置角色不允许修改权限 ([4b0aea5](https://github.com/continew-org/continew-admin-ui/commit/4b0aea536c20afd4733c811bd9d8e34cde199ce3))
+
 ## [v3.7.0](https://github.com/continew-org/continew-admin-ui/compare/v3.6.0...v3.7.0) (2025-06-13)
 
 ### ✨ 新特性

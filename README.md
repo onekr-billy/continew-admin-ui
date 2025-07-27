@@ -1,7 +1,7 @@
 # ContiNew Admin UI
 
 <a href="https://github.com/continew-org/continew-admin-ui" title="Release" target="_blank">
-<img src="https://img.shields.io/badge/SNAPSHOT-v4.0.0-%23ff3f59.svg" alt="Release" />
+<img src="https://img.shields.io/badge/RELEASE-v4.0.0-%23ff3f59.svg" alt="Release" />
 </a>
 <a href="https://vuejs.org/" title="Vue" target="_blank">
 <img src="https://img.shields.io/badge/Vue-3.5.4-%236CB52D.svg?logo=Vue.js" alt="Vue" />
@@ -39,13 +39,17 @@
 
 ## 简介
 
-**AI 编程纪元已经开启，基于 ContiNew 项目开发，让 AI 助手“学习”更优雅的代码规范，“写出”更优质的代码。**
-
 全新 3.0 版本，基于 Gi Demo 前端模板开发的 ContiNew Admin 前端适配项目。
 
-ContiNew Admin（Continue New Admin）持续迭代优化的前后端分离中后台管理系统框架。开箱即用，重视每一处代码规范，重视每一种解决方案细节，持续提供舒适的前、后端开发体验。
+**AI 编程纪元已经开启，基于 ContiNew 项目开发，让 AI 助手“学习”更优雅的代码规范，“写出”更优质的代码。**
 
-当前采用的技术栈：Spring Boot3（Java17）、Vue3 & Arco Design & TS & Vite、Sa-Token、MyBatis Plus、Redisson、JetCache、JustAuth、Crane4j、EasyExcel、Liquibase、Hutool 等。
+ContiNew Admin（Continue New Admin），页面现代美观，且专注设计与代码细节的 **高质量多租户中后台** 管理系统框架。开箱即用，持续迭代优化，持续提供舒适的开发体验。
+
+当前采用的技术栈：Spring Boot3（Java17）、Vue3 & Arco Design & TS & Vite、Sa-Token、MyBatis Plus、Redisson、FastExcel、CosId、JetCache、JustAuth、Crane4j、Spring Doc、Hutool 等。
+
+我们始终坚信好的产品必然是反复打磨出来的，而在工作中我们受限于客户需求、开发周期等因素，无法深度打磨、重构我们的代码，这也是架构腐烂的根源。所以，我们希望能在业余时间，通过开源社区的力量来打磨出一个好的产品，一个好的实践，一个好的生态。
+
+我们的愿景在于，当你将 ContiNew 系列项目应用到工作场景时，不仅仅是得到效率的提高，更可以得到舒适的开发体验，让更多开发者的编程工作多一点“甜”。
 
 ## 项目源码
 
@@ -83,17 +87,19 @@ ContiNew Admin（Continue New Admin）持续迭代优化的前后端分离中后
 
 2.**Starter 组件：** 从 v2.1.0 版本开始，抽取并封装后端基础组件及各框架集成配置到 ContiNew Starter 项目，且 **[已发布至 Maven 中央仓库](https://central.sonatype.com/search?q=continew-starter&namespace=top.continew)**，可在你的任意项目中直接引入所需依赖使用。即使你不用脚手架项目，难道能让你搭项目框架更快、更爽、更省力的 Starter 也要 Say No 吗？
 
-3.**CRUD 套件：** 封装通用增删改查套件，适配后端各分层，几分钟即可提供一套 CRUD API，包括新增、修改、批量删除、查询详情、分页列表查询、全部列表查询、树型列表查询、导出到 Excel，且 API 支持按实际所需开放或扩展。
+3.**CRUD 套件：** 封装通用增删改查套件，适配后端各分层，几分钟即可提供一套 CRUD API，包括新增、修改、批量删除、查询详情、分页列表查询、全部列表查询、树型列表查询、导出到 Excel，甚至是字典列表（用于下拉选项场景），且 API 支持按实际所需开放或扩展。
+
 ```java
 @Tag(name = "部门管理 API")
 @RestController
-@CrudRequestMapping(value = "/system/dept", api = {Api.TREE, Api.GET, Api.CREATE, Api.UPDATE, Api.DELETE, Api.EXPORT})
+@CrudRequestMapping(value = "/system/dept", api = {Api.TREE, Api.GET, Api.CREATE, Api.UPDATE, Api.DELETE, Api.EXPORT, Api.DICT_TREE})
 public class DeptController extends BaseController<DeptService, DeptResp, DeptDetailResp, DeptQuery, DeptReq> {}
 ```
 
 4.**代码生成器：** 提供代码生成器，已配套前、后端代码生成模板，数据表设计完之后，简单配置一下即可生成前、后端 80% 的代码，包含 CRUD API、权限控制、参数校验、接口文档等内容。如果业务不复杂，也可能就是 95% 的代码。
 
 5.**改善开发体验：** 持续优化及适配能改善开发体验的组件。
+
 - 适配 ContiNew Starter 各组件，针对 Spring 基础配置、通用解决方案以及流行框架进行了深度封装的 starter 集合，改善你在开发每个 Spring Boot Web 项目的体验。（时间日期及枚举参数自动转换、默认线程池、跨域、加密、脱敏、限流、幂等、License、日志、异常及响应通用解决方案等等，更多细节可查看 Starter 源码）
 - 适配 Crane4j 数据填充组件，减少因为一个用户名而产生的联表回填；
 - 适配 SpEL Validator 基于 SpEL 的 Java 参数校验，使用 SpEL 表达式，强化基础参数校验。例如：当其中一个字段为 xxx 时，另一个字段不能为空等等；
@@ -104,12 +110,9 @@ public class DeptController extends BaseController<DeptService, DeptResp, DeptDe
 
 6.**Almost最佳后端规范：** 后端严格遵循阿里巴巴 Java 编码规范，注释覆盖率 > 45%，接口参数示例 100%，代码分层使用体验佳，变量、方法命名清晰统一，前端代码也使用严格的 ESLint、StyleLint 等检查。良好的设计，代码复用率极高！写代码时，让你有一种无需多写，理应如此的感觉。我是代码洁癖，我实际写的时候很清楚这到底是不是乱吹。
 
-7.**卓越工程：** 后端采用模块化工程结构，并适配了统一项目版本号、编译项目自动代码格式化、代码混淆等插件，提供了自定义打包部署结构配置（配置文件、三方依赖和主程序分离），提供全套环境及应用的 Docker Compose 部署脚本。为了减少您开发新项目时的改造耗时，项目品牌配置持续进行深度聚合，简单的配置和结构修改即可快速开始独属于你的新项目。
+7.**卓越工程：** 后端采用模块化工程结构，并适配了统一项目版本号、编译项目自动代码格式化等插件，提供了自定义打包部署结构配置（配置文件、三方依赖和主程序分离），提供全套环境及应用的 Docker Compose 部署脚本。为了减少您开发新项目时的改造耗时，项目品牌配置持续进行深度聚合，简单的配置和结构修改即可快速开始独属于你的新项目。我们还进行了全局 Lombok 配置，继承场景默认自动生效 @EqualsAndHashCode(callSuper = true)、@ToString(callSuper = true)，不需要你手动添加了，并且主动禁用了部分 Lombok 注解，例如：@Val、@Log4j...，杜绝“又菜又爱玩”的 partner 滥用。
 
 8.**业务脚手架：** 有颜有料，不止是说说而已，持续打磨 UI 设计与色彩主题。提供基于 RBAC 的权限控制、通用数据权限，包含丰富的通用业务功能：第三方登录，邮箱、短信（生产级炸弹漏洞处理方案），个人中心、用户管理、角色管理、部门管理、系统配置（基础站点配置、邮件配置、安全配置）、系统日志、消息中心、通知公告等，设计用心，逻辑合理闭环。
-> 一个好的脚手架项目，不仅仅是提供一系列组件集成与配置，也不仅仅是封装一堆好用的工具，还更应该提供一系列通用基础业务解决方案及设计，为初创团队项目减负。
-
-9.**质量与安全：** CI 已集成 Sonar、Codacy，Push 即扫描代码质量，定期扫描 CVE 漏洞，及时解决潜在问题。封装数据库字段加密、JSON 脱敏、XSS 过滤等工具，提供诸多安全解决方案。
 
 由于篇幅有限，且项目正处于高速发展期，更多功能正在陆续上线（敬请关注仓库或群内动态）。另外像最基本的统一异常、错误处理，基础线程池等配置就不在此赘述，细节优化详情请 clone 代码查看。
 > Talk is cheap, show the code.
@@ -118,6 +121,7 @@ public class DeptController extends BaseController<DeptService, DeptResp, DeptDe
 
 > [!TIP]
 > 更多功能和优化正在赶来💦，最新项目计划、进展请进群或关注 [需求墙](https://continew.top/admin/other/feature.html) 和 [更新日志](https://continew.top/admin/changelog/)。
+> 功能不会用？请查看 [功能手册](https://continew.top/admin/function/tenant/management.html)。
 
 - 仪表盘：提供工作台、分析页，工作台提供功能快捷导航入口、最新公告、动态；分析页提供全面数据可视化能力
 - 个人中心：支持基础信息修改、密码修改、邮箱绑定、手机号绑定（并提供行为验证码、短信限流等安全处理）、第三方账号绑定/解绑、头像裁剪上传
@@ -136,13 +140,15 @@ public class DeptController extends BaseController<DeptService, DeptResp, DeptDe
   - 邮件配置：提供系统发件箱配置，也支持通过配置文件指定
   - 短信配置：提供系统短信服务配置，也支持通过配置文件指定
   - 存储配置：管理文件存储配置，支持本地存储、兼容 S3 协议对象存储
-  - 客户端配置：多客户端（PC端、小程序端等）认证管理，可设置不同的 token 有效期
+  - 客户端配置：多端（PC端、小程序端等）认证管理，可设置不同的 token 有效期
 - 在线用户：管理当前登录用户，可一键踢除下线
 - 日志管理：管理系统登录日志、操作日志，支持查看日志详情，包含请求头、响应头等报文信息
 - 短信日志：管理系统短信发送日志，支持删除、导出
-- 任务管理：管理系统定时任务，包含新增、修改、删除、执行功能，支持 Cron（可配置式生成 Cron 表达式） 和固定频率
-- 任务日志：管理定时任务执行日志，包含停止、重试指定批次，查询集群各节点的详细输出日志等功能
 - 应用管理：管理第三方系统应用 AK、SK，包含新增、修改、删除、查看密钥、重置密钥等功能，支持设置密钥有效期
+- 租户管理：管理租户信息，包含新增、修改、删除、分配角色等功能
+- 租户套餐：管理租户套餐信息，包含新增、修改、删除、查看等功能
+- 任务管理：管理系统定时任务，包含新增、修改、删除、执行功能，支持 Cron（可配置式生成 Cron 表达式） 和固定频率
+- 任务日志：管理定时任务执行日志，包含停止、重试指定批次等功能
 - 代码生成：提供根据数据库表自动生成相应的前后端 CRUD 代码的功能，支持同步最新表结构及代码生成预览
 
 ## 系统截图
@@ -247,6 +253,7 @@ continew-admin-ui
 │  │  ├─ common          # 公共模块
 │  │  ├─ monitor         # 系统监控模块
 │  │  ├─ open            # 能力开放模块
+│  │  ├─ tenant          # 租户模块
 │  │  ├─ schedule        # 任务调度模块
 │  │  └─ system          # 系统管理模块
 │  ├─ assets           # 静态资源
@@ -272,6 +279,9 @@ continew-admin-ui
 │  │  │  └─ workplace      # 工作台
 │  │  ├─ default         # 默认页面
 │  │  ├─ login           # 登录模块
+│  │  ├─ setting         # 设置
+│  │  │  ├─ profile        # 个人中心
+│  │  │  └─ message        # 消息中心
 │  │  ├─ monitor         # 系统监控
 │  │  │  ├─ log            # 系统日志
 │  │  │  │  ├─ login         # 登录日志
@@ -279,9 +289,12 @@ continew-admin-ui
 │  │  │  └─ online           # 在线用户
 │  │  ├─ open            # 能力开放
 │  │  │ └─ user            # 应用管理
-│  │  ├─ setting         # 设置
-│  │  │  ├─ profile        # 个人中心
-│  │  │  └─ message        # 消息中心
+│  │  ├─ tenant          # 租户管理
+│  │  │ ├─ management      # 租户管理
+│  │  │ └─ package         # 套餐管理
+│  │  ├─ schedule        # 任务调度
+│  │  │ ├─ job             # 任务管理
+│  │  │ └─ log             # 任务日志
 │  │  └─ system          # 系统管理
 │  │    ├─ config          # 系统配置
 │  │    ├─ dept            # 部门管理
