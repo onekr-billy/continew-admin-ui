@@ -13,7 +13,7 @@
   </a-modal>
 </template>
 
-<script setup lang="ts">
+<script setup lang="tsx">
 import { Message } from '@arco-design/web-vue'
 import { useWindowSize } from '@vueuse/core'
 import { addTenant, getTenant, updateTenant } from '@/apis/tenant/management'
@@ -43,7 +43,6 @@ const getPackageList = async () => {
 }
 
 const [form, resetForm] = useResetReactive({
-  isolationLevel: 1,
   status: 1,
 })
 
@@ -59,16 +58,22 @@ const columns: ColumnItem[] = reactive([
     },
   },
   {
-    label: '套餐',
-    field: 'packageId',
-    type: 'select',
+    label: () => (
+      <a-tooltip content="例如：example.com">
+        域名&nbsp;
+        <icon-question-circle />
+      </a-tooltip>
+    ),
+    field: 'domain',
+    type: 'input',
     span: 24,
-    required: true,
-    hide: () => {
-      return isUpdate.value
+    slots: {
+      prepend: () => (
+        <span style={{ textAlign: 'center' }}>http(s)://</span>
+      ),
     },
     props: {
-      options: packageList,
+      placeholder: '请输入域名',
     },
   },
   {
@@ -81,18 +86,18 @@ const columns: ColumnItem[] = reactive([
     },
   },
   {
-    label: '域名',
-    field: 'domain',
-    type: 'input',
-    span: 24,
-  },
-  {
-    label: '管理员用户',
-    field: 'username',
+    label: () => (
+      <a-tooltip content="自动初始化管理员用户">
+        管理员用户&nbsp;
+        <icon-question-circle />
+      </a-tooltip>
+    ),
+    field: 'adminUsername',
     type: 'input',
     span: 24,
     required: true,
     props: {
+      placeholder: '请输入管理员用户',
       maxLength: 64,
     },
     hide: () => {
@@ -101,7 +106,7 @@ const columns: ColumnItem[] = reactive([
   },
   {
     label: '管理员密码',
-    field: 'password',
+    field: 'adminPassword',
     type: 'input-password',
     span: 24,
     required: true,
@@ -110,6 +115,19 @@ const columns: ColumnItem[] = reactive([
     },
     hide: () => {
       return isUpdate.value
+    },
+  },
+  {
+    label: '套餐',
+    field: 'packageId',
+    type: 'select',
+    span: 24,
+    required: true,
+    hide: () => {
+      return isUpdate.value
+    },
+    props: {
+      options: packageList,
     },
   },
   {
@@ -151,7 +169,7 @@ const save = async () => {
     } else {
       await addTenant({
         ...form,
-        password: encryptByRsa(form.password),
+        adminPassword: encryptByRsa(form.adminPassword),
       })
       Message.success('新增成功')
     }

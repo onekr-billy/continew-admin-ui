@@ -14,6 +14,7 @@ export interface TenantResp {
   updateTime: string
   createUserString: string
   updateUserString: string
+  adminUsername: string
   packageName: string
 }
 export interface TenantQuery {

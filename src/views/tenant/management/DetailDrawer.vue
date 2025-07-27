@@ -1,7 +1,7 @@
 <template>
   <a-drawer v-model:visible="visible" title="租户详情" :width="width >= 600 ? 600 : '100%'" :footer="false">
     <a-descriptions :column="2" size="large" class="general-description">
-      <a-descriptions-item label="ID" :span="2">
+      <a-descriptions-item label="ID">
         <a-typography-paragraph copyable>{{ dataDetail?.id }}</a-typography-paragraph>
       </a-descriptions-item>
       <a-descriptions-item label="编码">
@@ -9,9 +9,9 @@
       </a-descriptions-item>
       <a-descriptions-item label="名称">{{ dataDetail?.name }}</a-descriptions-item>
       <a-descriptions-item label="套餐">{{ dataDetail?.packageName }}</a-descriptions-item>
-      <a-descriptions-item label="状态">
-        <a-tag v-if="dataDetail?.status === 1" color="green">启用</a-tag>
-        <a-tag v-else color="red">禁用</a-tag>
+      <a-descriptions-item label="域名">
+        <a v-if="dataDetail?.domain" style="color: rgb(var(--arcoblue-7))">{{ dataDetail?.domain }}</a>
+        <span v-else style="color: red" class="text-red-4">未设置</span>
       </a-descriptions-item>
       <a-descriptions-item label="过期时间">
         <span v-if="!dataDetail?.expireTime">
@@ -19,9 +19,10 @@
         </span>
         <span v-else>{{ dataDetail?.expireTime }}</span>
       </a-descriptions-item>
-      <a-descriptions-item label="域名">
-        <a v-if="dataDetail?.domain" style="color: rgb(var(--arcoblue-7))">{{ dataDetail?.domain }}</a>
-        <span v-else style="color: red" class="text-red-4">未设置</span>
+      <a-descriptions-item label="管理员用户">{{ dataDetail?.adminUsername }}</a-descriptions-item>
+      <a-descriptions-item label="状态">
+        <a-tag v-if="dataDetail?.status === 1" color="green">启用</a-tag>
+        <a-tag v-else color="red">禁用</a-tag>
       </a-descriptions-item>
       <a-descriptions-item label="创建人">{{ dataDetail?.createUserString }}</a-descriptions-item>
       <a-descriptions-item label="创建时间">{{ dataDetail?.createTime }}</a-descriptions-item>
