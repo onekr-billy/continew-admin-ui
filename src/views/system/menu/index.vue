@@ -96,7 +96,7 @@
 import type { TableInstance } from '@arco-design/web-vue'
 import { Message, Modal } from '@arco-design/web-vue'
 import MenuAddModal from './MenuAddModal.vue'
-import { type MenuQuery, type MenuResp, clearMenuCache, deleteMenu, listMenu } from '@/apis/system/menu'
+import { type MenuQuery, type MenuResp, clearMenuCache, deleteMenu, listMenuDictTree } from '@/apis/system/menu'
 import type GiTable from '@/components/GiTable/index.vue'
 import { useTable } from '@/hooks'
 import { isMobile } from '@/utils'
@@ -111,7 +111,7 @@ const {
   loading,
   search,
   handleDelete,
-} = useTable(() => listMenu(queryForm), { immediate: true })
+} = useTable(() => listMenuDictTree({ description: queryForm.description || '' }), { immediate: true })
 
 // 过滤树
 const searchData = (title: string, path: string, permission: string) => {

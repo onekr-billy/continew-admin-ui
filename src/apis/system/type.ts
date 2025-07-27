@@ -63,6 +63,15 @@ export type RoleDetailResp = RoleResp & {
   menuCheckStrictly: boolean
   deptCheckStrictly: boolean
 }
+export interface RolePermissionResp {
+  id: string
+  title: string
+  parentId: string
+  permission?: string
+  children?: RolePermissionResp[]
+  permissions?: RolePermissionResp[]
+  isChecked?: boolean
+}
 export interface RoleUserResp {
   id: string
   username: string

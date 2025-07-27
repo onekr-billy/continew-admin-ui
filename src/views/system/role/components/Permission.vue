@@ -56,12 +56,11 @@
 
 <script setup lang="ts">
 import { nextTick, ref, watch } from 'vue'
-import { Message, type TableInstance } from '@arco-design/web-vue'
-import { type MenuResp, listMenu } from '@/apis/system/menu'
+import { Message, type TableInstance, type TreeNodeData } from '@arco-design/web-vue'
 import { isMobile } from '@/utils'
 import type GiTable from '@/components/GiTable/index.vue'
 import { useTable } from '@/hooks'
-import { getRole, updateRolePermission } from '@/apis'
+import { type RolePermissionResp, getRole, listRolePermissionTree, updateRolePermission } from '@/apis/system/role'
 import has from '@/utils/has'
 
 const props = withDefaults(defineProps<Props>(), {
@@ -72,16 +71,7 @@ interface Props {
   roleId: string
 }
 
-interface PermissionItem {
-  id: string | number
-  title: string
-  parentId: string | number
-  permission?: string
-  isChecked?: boolean
-}
-
-interface ExtendedMenuResp extends MenuResp {
-  permissions?: PermissionItem[]
+interface ExtendedRolePermissionResp extends RolePermissionResp {
   checkedPermissions?: (string | number)[]
   isChecked?: boolean
   disabled?: boolean
@@ -105,12 +95,12 @@ const onExpanded = () => {
  *
  * @param menus 菜单数据
  */
-const transformMenu = (menus: MenuResp[]): ExtendedMenuResp[] => {
-  return menus.map((item): ExtendedMenuResp => {
+const transformMenu = (menus: RolePermissionResp[]): ExtendedRolePermissionResp[] => {
+  return menus.map((item): ExtendedRolePermissionResp => {
     // 如果当前项有子项，递归处理子项
     if (item.children && item.children.length > 0) {
-      // 过滤出 type 为 3 的按钮权限
-      const permissions = item.children.filter((child) => child.type === 3 || child.permission).map((child): PermissionItem => ({
+      // 过滤出 permission 不为空的子项
+      const permissions = item.children.filter((child) => child.permission).map((child): RolePermissionResp => ({
         id: child.id,
         title: child.title,
         parentId: child.parentId,
@@ -118,13 +108,13 @@ const transformMenu = (menus: MenuResp[]): ExtendedMenuResp[] => {
         isChecked: false,
       }))
 
-      // 过滤出 type 不为 3 的子项
-      item.children = item.children.filter((child) => child.type !== 3 && !child.permission)
+      // 过滤出 permission 为空的子项
+      item.children = item.children.filter((child) => !child.permission)
 
       // 如果有权限，将其添加到当前项的 permissions 属性中
       if (permissions.length > 0) {
-        (item as ExtendedMenuResp).permissions = permissions
-        ;(item as ExtendedMenuResp).checkedPermissions = permissions.filter((permission) => permission.isChecked).map((permission) => permission.id)
+        (item as ExtendedRolePermissionResp).permissions = permissions
+        ;(item as ExtendedRolePermissionResp).checkedPermissions = permissions.filter((permission) => permission.isChecked).map((permission) => permission.id)
       }
 
       // 递归处理剩余的子项
@@ -141,7 +131,7 @@ const transformMenu = (menus: MenuResp[]): ExtendedMenuResp[] => {
 }
 
 // 更新表格数据的选中状态
-const updateTableDataCheckedStatus = (data: ExtendedMenuResp[], selectedKeys: (string | number)[]) => {
+const updateTableDataCheckedStatus = (data: ExtendedRolePermissionResp[], selectedKeys: (string | number)[]) => {
   data.forEach((item) => {
     item.disabled = disabled.value
     // 设置菜单项的选中状态
@@ -157,23 +147,23 @@ const updateTableDataCheckedStatus = (data: ExtendedMenuResp[], selectedKeys: (s
     }
     // 递归处理子菜单
     if (item.children) {
-      updateTableDataCheckedStatus(item.children as ExtendedMenuResp[], selectedKeys)
+      updateTableDataCheckedStatus(item.children as ExtendedRolePermissionResp[], selectedKeys)
     }
   })
 }
 
 // 查找指定菜单 - 使用 Map 缓存优化查找性能
-const menuMap = ref<Map<string | number, ExtendedMenuResp>>(new Map())
+const menuMap = ref<Map<string | number, ExtendedRolePermissionResp>>(new Map())
 
 // 构建菜单映射缓存
-const buildMenuMap = (data: ExtendedMenuResp[]) => {
-  const map = new Map<string | number, ExtendedMenuResp>()
+const buildMenuMap = (data: ExtendedRolePermissionResp[]) => {
+  const map = new Map<string | number, ExtendedRolePermissionResp>()
 
-  const traverse = (items: ExtendedMenuResp[]) => {
+  const traverse = (items: ExtendedRolePermissionResp[]) => {
     items.forEach((item) => {
       map.set(item.id, item)
       if (item.children?.length) {
-        traverse(item.children as ExtendedMenuResp[])
+        traverse(item.children as ExtendedRolePermissionResp[])
       }
     })
   }
@@ -188,9 +178,9 @@ const {
   tableData,
   loading,
   search,
-} = useTable(() => listMenu(), {
+} = useTable(() => listRolePermissionTree(), {
   immediate: true,
-  formatResult(data: MenuResp[]) {
+  formatResult(data: TreeNodeData[]) {
     return transformMenu(data)
   },
   onSuccess: () => {
@@ -198,10 +188,10 @@ const {
       tableRef.value?.tableRef?.expandAll(true)
     })
     // 构建菜单映射缓存
-    buildMenuMap(tableData.value as ExtendedMenuResp[])
+    buildMenuMap(tableData.value as ExtendedRolePermissionResp[])
     // 初始加载时应用已选中的权限
     if (selectedKeys.value.size > 0) {
-      updateTableDataCheckedStatus(tableData.value as ExtendedMenuResp[], Array.from(selectedKeys.value))
+      updateTableDataCheckedStatus(tableData.value as ExtendedRolePermissionResp[], Array.from(selectedKeys.value))
     }
   },
 })
@@ -212,13 +202,13 @@ const columns: TableInstance['columns'] = [
 ]
 
 // 级联选中子项
-const cascadeSelectChild = (record: ExtendedMenuResp, isCascade: boolean) => {
+const cascadeSelectChild = (record: ExtendedRolePermissionResp, isCascade: boolean) => {
   if (!isCascade) return
 
   // 批量处理子菜单
   if (record.children && record.children.length > 0) {
     record.children.forEach((child) => {
-      const extendedChild = child as ExtendedMenuResp
+      const extendedChild = child as ExtendedRolePermissionResp
       extendedChild.isChecked = record.isChecked
       tableRef.value?.tableRef?.select(child.id, extendedChild.isChecked)
 
@@ -253,19 +243,19 @@ const cascadeSelectChild = (record: ExtendedMenuResp, isCascade: boolean) => {
 }
 
 // 查找指定菜单
-const findItem = (id: string | number): ExtendedMenuResp | null => {
+const findItem = (id: string | number): ExtendedRolePermissionResp | null => {
   return menuMap.value.get(id) || null
 }
 
 // 级联选中父项目
-const cascadeSelectParent = (record: ExtendedMenuResp, isCascade: boolean) => {
+const cascadeSelectParent = (record: ExtendedRolePermissionResp, isCascade: boolean) => {
   if (!isCascade || !record.parentId || record.parentId === '0') return
 
   const parent = findItem(record.parentId)
   if (!parent) return
 
   // 检查父项目的所有子项是否有被选中的
-  const hasCheckedChildren = parent.children?.some((child) => (child as ExtendedMenuResp).isChecked)
+  const hasCheckedChildren = parent.children?.some((child) => (child as ExtendedRolePermissionResp).isChecked)
   parent.isChecked = hasCheckedChildren || false
 
   // 更新表格选中状态
@@ -286,7 +276,7 @@ const cascadeSelectParent = (record: ExtendedMenuResp, isCascade: boolean) => {
 
 // 选中
 const select: TableInstance['onSelect'] = (rowKeys, checked, record) => {
-  const extendedRecord = record as ExtendedMenuResp
+  const extendedRecord = record as ExtendedRolePermissionResp
 
   // 如果处于禁用状态，直接返回，不执行任何逻辑
   if (disabled.value || extendedRecord.disabled) {
@@ -312,7 +302,7 @@ const selectAll: TableInstance['onSelectAll'] = (checked) => {
   }
 
   tableData.value.forEach((item) => {
-    const extendedItem = item as ExtendedMenuResp
+    const extendedItem = item as ExtendedRolePermissionResp
     extendedItem.isChecked = checked
     checked
       ? selectedKeys.value.add(item.id)
@@ -322,7 +312,7 @@ const selectAll: TableInstance['onSelectAll'] = (checked) => {
 }
 
 // 选中权限
-const selectPermission = (record: ExtendedMenuResp) => {
+const selectPermission = (record: ExtendedRolePermissionResp) => {
   // 如果处于禁用状态，直接返回，不执行任何逻辑
   if (disabled.value || record.disabled) {
     return
@@ -384,9 +374,9 @@ const fetchRole = async (id: string) => {
     // 更新选中键集合
     selectedKeys.value = new Set(data.menuIds)
     // 重新构建菜单映射缓存
-    buildMenuMap(tableData.value as ExtendedMenuResp[])
+    buildMenuMap(tableData.value as ExtendedRolePermissionResp[])
     // 更新表格数据的选中状态
-    updateTableDataCheckedStatus(tableData.value as ExtendedMenuResp[], data.menuIds)
+    updateTableDataCheckedStatus(tableData.value as ExtendedRolePermissionResp[], data.menuIds)
     // 手动设置表格行的选中状态，确保组件响应
     await nextTick(() => {
       tableRef.value?.tableRef?.selectAll(false)

@@ -31,6 +31,11 @@ export function deleteRole(id: string) {
   return http.del(`${BASE_URL}`, { ids: [id] })
 }
 
+/** @desc 查询角色权限树 */
+export function listRolePermissionTree() {
+  return http.get<T.RolePermissionResp[]>(`${BASE_URL}/permission/tree`)
+}
+
 /** @desc 修改角色权限 */
 export function updateRolePermission(id: string, data: any) {
   return http.put(`${BASE_URL}/${id}/permission`, data)
