@@ -56,23 +56,24 @@
         <a-space>
           <a-link v-permission="['open:app:get']" title="详情" @click="onDetail(record)">详情</a-link>
           <a-link v-permission="['open:app:update']" title="修改" @click="onUpdate(record)">修改</a-link>
-          <a-link
-            v-permission="['open:app:delete']"
-            status="danger"
-            :disabled="record.disabled"
-            :title="record.disabled ? '禁止删除' : '删除'"
-            @click="onDelete(record)"
-          >
-            删除
-          </a-link>
           <a-dropdown>
-            <a-button v-if="has.hasPermOr(['open:app:resetSecret'])" type="text" size="mini" title="更多">
+            <a-button v-if="has.hasPermOr(['open:app:resetSecret', 'open:app:delete'])" type="text" size="mini" title="更多">
               <template #icon>
                 <icon-more :size="16" />
               </template>
             </a-button>
             <template #content>
               <a-doption v-permission="['open:app:resetSecret']" title="重置密钥" @click="onResetSecret(record)">重置密钥</a-doption>
+              <a-doption v-permission="['open:app:delete']">
+                <a-link
+                  status="danger"
+                  :disabled="record.disabled"
+                  :title="record.disabled ? '禁止删除' : '删除'"
+                  @click="onDelete(record)"
+                >
+                  删除
+                </a-link>
+              </a-doption>
             </template>
           </a-dropdown>
         </a-space>
@@ -137,14 +138,14 @@ const columns: TableInstance['columns'] = [
     title: '操作',
     dataIndex: 'action',
     slotName: 'action',
-    width: 190,
+    width: 160,
     align: 'center',
     fixed: !isMobile() ? 'right' : undefined,
     show: has.hasPermOr([
       'open:app:get',
       'open:app:update',
-      'open:app:delete',
       'open:app:resetSecret',
+      'open:app:delete',
     ]),
   },
 ]

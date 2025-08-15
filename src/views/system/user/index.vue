@@ -53,17 +53,8 @@
         <a-space>
           <a-link v-permission="['system:user:get']" title="详情" @click="onDetail(record)">详情</a-link>
           <a-link v-permission="['system:user:update']" title="修改" @click="onUpdate(record)">修改</a-link>
-          <a-link
-            v-permission="['system:user:delete']"
-            status="danger"
-            :disabled="record.isSystem"
-            :title="record.isSystem ? '系统内置数据不能删除' : '删除'"
-            @click="onDelete(record)"
-          >
-            删除
-          </a-link>
           <a-dropdown>
-            <a-button v-if="has.hasPermOr(['system:user:resetPwd', 'system:user:updateRole'])" type="text" size="mini" title="更多">
+            <a-button v-if="has.hasPermOr(['system:user:resetPwd', 'system:user:updateRole', 'system:user:delete'])" type="text" size="mini" title="更多">
               <template #icon>
                 <icon-more :size="16" />
               </template>
@@ -71,6 +62,16 @@
             <template #content>
               <a-doption v-permission="['system:user:resetPwd']" title="重置密码" @click="onResetPwd(record)">重置密码</a-doption>
               <a-doption v-permission="['system:user:updateRole']" :disabled="record.isSystem" title="分配角色" @click="onUpdateRole(record)">分配角色</a-doption>
+              <a-doption v-permission="['system:user:delete']">
+                <a-link
+                  status="danger"
+                  :disabled="record.isSystem"
+                  :title="record.isSystem ? '系统内置数据不能删除' : '删除'"
+                  @click="onDelete(record)"
+                >
+                  删除
+                </a-link>
+              </a-doption>
             </template>
           </a-dropdown>
         </a-space>
@@ -174,15 +175,15 @@ const columns: TableInstance['columns'] = [
     title: '操作',
     dataIndex: 'action',
     slotName: 'action',
-    width: 190,
+    width: 160,
     align: 'center',
     fixed: !isMobile() ? 'right' : undefined,
     show: has.hasPermOr([
       'system:user:get',
       'system:user:update',
-      'system:user:delete',
       'system:user:resetPwd',
       'system:user:updateRole',
+      'system:user:delete',
     ]),
   },
 ]
