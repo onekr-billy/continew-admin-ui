@@ -77,22 +77,22 @@
       </template>
     </GiTable>
 
-    <UserAddDrawer ref="UserAddDrawerRef" @save-success="search" />
-    <UserImportDrawer ref="UserImportDrawerRef" @save-success="search" />
-    <UserDetailDrawer ref="UserDetailDrawerRef" />
-    <UserResetPwdModal ref="UserResetPwdModalRef" />
-    <UserUpdateRoleModal ref="UserUpdateRoleModalRef" @save-success="search" />
+    <AddDrawer ref="AddDrawerRef" @save-success="search" />
+    <ImportDrawer ref="ImportDrawerRef" @save-success="search" />
+    <DetailDrawer ref="DetailDrawerRef" />
+    <PwdResetModal ref="PwdResetModalRef" />
+    <RoleUpdateModal ref="RoleUpdateModalRef" @save-success="search" />
   </GiPageLayout>
 </template>
 
 <script setup lang="ts">
 import type { TableInstance } from '@arco-design/web-vue'
 import DeptTree from './dept/index.vue'
-import UserAddDrawer from './UserAddDrawer.vue'
-import UserImportDrawer from './UserImportDrawer.vue'
-import UserDetailDrawer from './UserDetailDrawer.vue'
-import UserResetPwdModal from './UserResetPwdModal.vue'
-import UserUpdateRoleModal from './UserUpdateRoleModal.vue'
+import AddDrawer from './AddDrawer.vue'
+import ImportDrawer from './ImportDrawer.vue'
+import DetailDrawer from './DetailDrawer.vue'
+import PwdResetModal from './PwdResetModal.vue'
+import RoleUpdateModal from './RoleUpdateModal.vue'
 import { type UserResp, deleteUser, exportUser, listUser } from '@/apis/system/user'
 import { DisEnableStatusList } from '@/constant/common'
 import { useDownload, useResetReactive, useTable } from '@/hooks'
@@ -212,39 +212,39 @@ const handleSelectDept = (keys: Array<any>) => {
   search()
 }
 
-const UserImportDrawerRef = ref<InstanceType<typeof UserImportDrawer>>()
+const ImportDrawerRef = ref<InstanceType<typeof ImportDrawer>>()
 // 导入
 const onImport = () => {
-  UserImportDrawerRef.value?.onOpen()
+  ImportDrawerRef.value?.onOpen()
 }
 
-const UserAddDrawerRef = ref<InstanceType<typeof UserAddDrawer>>()
+const AddDrawerRef = ref<InstanceType<typeof AddDrawer>>()
 // 新增
 const onAdd = () => {
-  UserAddDrawerRef.value?.onAdd()
+  AddDrawerRef.value?.onAdd()
 }
 
 // 修改
 const onUpdate = (record: UserResp) => {
-  UserAddDrawerRef.value?.onUpdate(record.id)
+  AddDrawerRef.value?.onUpdate(record.id)
 }
 
-const UserDetailDrawerRef = ref<InstanceType<typeof UserDetailDrawer>>()
+const DetailDrawerRef = ref<InstanceType<typeof DetailDrawer>>()
 // 详情
 const onDetail = (record: UserResp) => {
-  UserDetailDrawerRef.value?.onOpen(record.id)
+  DetailDrawerRef.value?.onOpen(record.id)
 }
 
-const UserResetPwdModalRef = ref<InstanceType<typeof UserResetPwdModal>>()
+const PwdResetModalRef = ref<InstanceType<typeof PwdResetModal>>()
 // 重置密码
 const onResetPwd = (record: UserResp) => {
-  UserResetPwdModalRef.value?.onOpen(record.id)
+  PwdResetModalRef.value?.onOpen(record.id)
 }
 
-const UserUpdateRoleModalRef = ref<InstanceType<typeof UserUpdateRoleModal>>()
+const RoleUpdateModalRef = ref<InstanceType<typeof RoleUpdateModal>>()
 // 分配角色
 const onUpdateRole = (record: UserResp) => {
-  UserUpdateRoleModalRef.value?.onOpen(record.id)
+  RoleUpdateModalRef.value?.onOpen(record.id)
 }
 </script>
 

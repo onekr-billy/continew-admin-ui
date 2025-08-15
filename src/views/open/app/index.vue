@@ -79,16 +79,16 @@
       </template>
     </GiTable>
 
-    <AppAddModal ref="AppAddModalRef" @save-success="search" />
-    <AppDetailDrawer ref="AppDetailDrawerRef" />
+    <AddModal ref="AddModalRef" @save-success="search" />
+    <DetailDrawer ref="DetailDrawerRef" />
   </GiPageLayout>
 </template>
 
 <script setup lang="ts">
 import type { TableInstance } from '@arco-design/web-vue'
 import { Message, Modal } from '@arco-design/web-vue'
-import AppAddModal from './AppAddModal.vue'
-import AppDetailDrawer from './AppDetailDrawer.vue'
+import AddModal from './AddModal.vue'
+import DetailDrawer from './DetailDrawer.vue'
 import {
   type AppQuery,
   type AppResp,
@@ -200,21 +200,21 @@ const onResetSecret = async (record: AppResp) => {
   })
 }
 
-const AppAddModalRef = ref<InstanceType<typeof AppAddModal>>()
+const AddModalRef = ref<InstanceType<typeof AddModal>>()
 // 新增
 const onAdd = () => {
-  AppAddModalRef.value?.onAdd()
+  AddModalRef.value?.onAdd()
 }
 
 // 修改
 const onUpdate = (record: AppResp) => {
-  AppAddModalRef.value?.onUpdate(record.id)
+  AddModalRef.value?.onUpdate(record.id)
 }
 
-const AppDetailDrawerRef = ref<InstanceType<typeof AppDetailDrawer>>()
+const DetailDrawerRef = ref<InstanceType<typeof DetailDrawer>>()
 // 详情
 const onDetail = (record: AppResp) => {
-  AppDetailDrawerRef.value?.onOpen(record.id)
+  DetailDrawerRef.value?.onOpen(record.id)
 }
 </script>
 

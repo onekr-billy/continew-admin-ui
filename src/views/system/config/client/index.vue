@@ -53,16 +53,16 @@
       </template>
     </GiTable>
 
-    <ClientAddModal ref="ClientAddModalRef" @save-success="search" />
-    <ClientDetailDrawer ref="ClientDetailDrawerRef" />
+    <AddModal ref="AddModalRef" @save-success="search" />
+    <DetailDrawer ref="DetailDrawerRef" />
   </GiPageLayout>
 </template>
 
 <script setup lang="tsx">
 import type { LabelValue } from '@arco-design/web-vue/es/tree-select/interface'
 import type { TableInstance } from '@arco-design/web-vue'
-import ClientAddModal from './ClientAddModal.vue'
-import ClientDetailDrawer from './ClientDetailDrawer.vue'
+import AddModal from './AddModal.vue'
+import DetailDrawer from './DetailDrawer.vue'
 import { type ClientQuery, type ClientResp, deleteClient, listClient } from '@/apis/system/client'
 import { DisEnableStatusList } from '@/constant/common'
 import { useTable } from '@/hooks'
@@ -186,21 +186,21 @@ const onDelete = (record: ClientResp) => {
   })
 }
 
-const ClientAddModalRef = ref<InstanceType<typeof ClientAddModal>>()
+const AddModalRef = ref<InstanceType<typeof AddModal>>()
 // 新增
 const onAdd = () => {
-  ClientAddModalRef.value?.onAdd()
+  AddModalRef.value?.onAdd()
 }
 
 // 修改
 const onUpdate = (record: ClientResp) => {
-  ClientAddModalRef.value?.onUpdate(record.id)
+  AddModalRef.value?.onUpdate(record.id)
 }
 
-const ClientDetailDrawerRef = ref<InstanceType<typeof ClientDetailDrawer>>()
+const DetailDrawerRef = ref<InstanceType<typeof DetailDrawer>>()
 // 详情
 const onDetail = (record: ClientResp) => {
-  ClientDetailDrawerRef.value?.onOpen(record.id)
+  DetailDrawerRef.value?.onOpen(record.id)
 }
 </script>
 

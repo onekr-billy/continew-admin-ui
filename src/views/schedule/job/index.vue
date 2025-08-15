@@ -72,8 +72,8 @@
       </template>
     </GiTable>
 
-    <JobAddModal ref="JobAddModalRef" @save-success="reset" />
-    <JobDetailDrawer ref="JobDetailDrawerRef" />
+    <AddModal ref="AddModalRef" @save-success="reset" />
+    <DetailDrawer ref="DetailDrawerRef" />
   </GiPageLayout>
 </template>
 
@@ -81,8 +81,8 @@
 import type { TableInstance } from '@arco-design/web-vue'
 import { Message } from '@arco-design/web-vue'
 import { useRouter } from 'vue-router'
-import JobAddModal from './JobAddModal.vue'
-import JobDetailDrawer from './JobDetailDrawer.vue'
+import AddModal from './AddModal.vue'
+import DetailDrawer from './DetailDrawer.vue'
 import { type JobQuery, type JobResp, deleteJob, listGroup, listJob, triggerJob, updateJobStatus } from '@/apis/schedule'
 import { useTable } from '@/hooks'
 import { useDict } from '@/hooks/app'
@@ -178,21 +178,21 @@ const onTrigger = (record: JobResp) => {
   })
 }
 
-const JobAddModalRef = ref<InstanceType<typeof JobAddModal>>()
+const AddModalRef = ref<InstanceType<typeof AddModal>>()
 // 新增
 const onAdd = () => {
-  JobAddModalRef.value?.onAdd()
+  AddModalRef.value?.onAdd()
 }
 
 // 修改
 const onUpdate = (record: JobResp) => {
-  JobAddModalRef.value?.onUpdate(record)
+  AddModalRef.value?.onUpdate(record)
 }
 
-const JobDetailDrawerRef = ref<InstanceType<typeof JobDetailDrawer>>()
+const DetailDrawerRef = ref<InstanceType<typeof DetailDrawer>>()
 // 详情
 const onDetail = (record: JobResp) => {
-  JobDetailDrawerRef.value?.onOpen(record)
+  DetailDrawerRef.value?.onOpen(record)
 }
 
 const router = useRouter()
