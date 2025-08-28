@@ -8,7 +8,14 @@
     @before-ok="save"
     @close="reset"
   >
-    <GiForm ref="formRef" v-model="form" :columns="columns" />
+    <GiForm ref="formRef" v-model="form" :columns="columns">
+      <template #secretKey>
+        <a-input
+          v-model="form.secretKey"
+          :placeholder="isUpdate ? '保持 Secret Key 为空将不更改' : '请输入 Secret Key'"
+        />
+      </template>
+    </GiForm>
   </a-modal>
 </template>
 
@@ -77,7 +84,7 @@ const columns: ColumnItem[] = reactive([
     field: 'secretKey',
     type: 'input',
     span: 24,
-    required: true,
+    required: () => !isUpdate.value,
     show: () => form.type === 2,
   },
   {
@@ -165,7 +172,7 @@ const save = async () => {
     if (isUpdate.value) {
       await updateStorage({
         ...form,
-        secretKey: form.type === 2 && !form.secretKey.includes('*') ? encryptByRsa(form.secretKey) || '' : null,
+        secretKey: form.type === 2 && form.secretKey ? encryptByRsa(form.secretKey) || '' : null,
       }, dataId.value)
       Message.success('修改成功')
     } else {
