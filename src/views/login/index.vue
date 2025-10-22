@@ -81,13 +81,13 @@
       <div class="list">
         <div v-if="isEmailLogin" class="mode item" @click="toggleLoginMode"><icon-user /> 账号/手机号登录</div>
         <div v-else class="mode item" @click="toggleLoginMode"><icon-email /> 邮箱登录</div>
-        <a v-if="!tenantStore.isTenantConfigured" class="item" title="使用 Gitee 账号登录" @click="onOauth('gitee')">
+        <a class="item" title="使用 Gitee 账号登录" @click="onOauth('gitee')">
           <GiSvgIcon name="gitee" :size="24" />
         </a>
-        <a v-if="tenantStore.isTenantConfigured" class="item" title="使用 GitHub 账号登录" @click="onOauth('github')">
+        <a class="item" title="使用 GitHub 账号登录" @click="onOauth('github')">
           <GiSvgIcon name="github" :size="24" />
         </a>
-        <a v-if="tenantStore.isTenantConfigured" class="item" title="使用微信账号登录" @click="onOauth('wechat_open')">
+        <a class="item" title="使用微信账号登录" @click="onOauth('wechat_open')">
           <GiSvgIcon name="wechat" :size="24" />
         </a>
       </div>
