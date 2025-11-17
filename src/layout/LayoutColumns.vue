@@ -11,7 +11,7 @@
           <span v-show="!appStore.menuCollapse" class="system-name gi_line_1">{{ appStore.getTitle() }}</span>
         </div>
         <Menu
-          v-if="twoLevelMenus.length > 1 || oneLevelMenuActiveRoute?.meta?.alwaysShow === true"
+          v-if="twoLevelMenus.length >= 1 || oneLevelMenuActiveRoute?.meta?.alwaysShow === true"
           class="layout-columns__menu" :menus="twoLevelMenus" :menu-style="menuStyle"
         />
       </div>
